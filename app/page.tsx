@@ -4,6 +4,7 @@ import DataTable from "@/components/DataTable";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { TrendingDown, TrendingUp } from "lucide-react";
+import { fetcher } from "@/lib/coingecko.actions";
 
 const dummyTrendingCoins: TrendingCoin[] = [
   {
@@ -65,7 +66,13 @@ const columns: DataTableColumn<TrendingCoin>[] = [
 
       return (
         <Link href={`/coins/${item.id}`} className="flex items-center gap-2">
-          <Image src={item.large} alt={item.name} width={36} height={36} className="rounded-full" />
+          <Image
+            src={item.large}
+            alt={item.name}
+            width={36}
+            height={36}
+            className="rounded-full"
+          />
           <p className="font-semibold">{item.name}</p>
           <span className="text-xs text-gray-400 uppercase">{item.symbol}</span>
         </Link>
@@ -107,7 +114,13 @@ const columns: DataTableColumn<TrendingCoin>[] = [
   },
 ];
 
-const Page = () => {
+const Page = async () => {
+  const coin = await fetcher<CoinDetailsData>("coins/bitcoin", {
+    dex_pair_format: "symbol",
+  });
+
+  console.log(coin);
+
   return (
     <main className="main-container">
       <section className="home-grid">
